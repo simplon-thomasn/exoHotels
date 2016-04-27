@@ -1,0 +1,12 @@
+{% extends "layout.html.twig" %}
+
+{% block title %}HOME{% endblock %}
+
+{% block content %}
+  {% for hotel in hotels %}
+  <article>
+    <h2><a class="hotelName" href="{{ path('hotel', { 'id': hotel.id }) }}">{{ hotel.name }}</a></h2>
+    <p>{{ hotel.address }}</p>
+  </article>
+  {% endfor %}
+{% endblock %}

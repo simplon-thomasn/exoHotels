@@ -10,3 +10,8 @@ insert into t_hotels values (
 insert into t_hotels values (
   4, 'Hotêl Joyet de Maubec', 'Uzerche', 4
 );
+
+insert into t_comments values
+(1, 'Homer Simpson', 'Super hotel, restaurant au top', 1);
+insert into t_comments values
+(2, 'Matt Groening', 'Extra', 3);

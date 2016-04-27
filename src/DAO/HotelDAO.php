@@ -2,44 +2,44 @@
 
 namespace exoHotels\DAO;
 
-use Doctrine\DBAL\Connection;
 use exoHotels\Domain\Hotel;
 
-class HotelDAO
+class HotelDAO extends DAO
 {
     /**
-     * Database connection
-     *
-     * @var \Doctrine\DBAL\Connection
-     */
-    private $db;
-
-    /**
-     * Constructor
-     *
-     * @param \Doctrine\DBAL\Connection The database connection object
-     */
-    public function __construct(Connection $db) {
-        $this->db = $db;
-    }
-
-    /**
-     * Return a list of all hotels, sorted by class (most class first).
+     * Return a list of all hotels, sorted by class (better class first).
      *
      * @return array A list of all hotels.
      */
     public function findAll() {
         $sql = "SELECT * FROM t_hotels ORDER BY hot_class DESC";
-        $result = $this->db->fetchAll($sql);
+        $result = $this->getDb()->fetchAll($sql);
 
         // Convert query result to an array of domain objects
         $hotels = array();
         foreach ($result as $row) {
             $hotelId = $row['hot_id'];
-            $hotels[$hotelId] = $this->buildHotel($row);
+            $hotels[$hotelId] = $this->buildDomainObject($row);
         }
 
         return $hotels;
+    }
+
+    /**
+     * Returns an hotel matching the supplied id.
+     *
+     * @param integer $id
+     *
+     * @return \exoHotels\Domain\Hotel|throws an exception if no matching hotel is found
+     */
+    public function find($id) {
+        $sql = "SELECT * FROM t_hotels WHERE hot_id=?";
+        $row = $this->getDb()->fetchAssoc($sql, array($id));
+
+        if ($row)
+            return $this->buildDomainObject($row);
+        else
+            throw new \Exception("Nous ne trouvons pas d'hotel pour cet id " . $id);
     }
 
     /**
@@ -48,13 +48,13 @@ class HotelDAO
      * @param array $row The DB row containing Hotel data.
      * @return \exoHotels\Domain\Hotel
      */
-    private function buildHotel(array $row) {
+    protected function buildDomainObject(array $row) {
         $hotel = new Hotel();
         $hotel->setId($row['hot_id']);
         $hotel->setName($row['hot_name']);
         $hotel->setAddress($row['hot_address']);
         $hotel->setClass($row['hot_class']);
-        
+
         return $hotel;
     }
 }

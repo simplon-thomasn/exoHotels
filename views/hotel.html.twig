@@ -1,0 +1,16 @@
+{% extends "layout.html.twig" %}
+
+{% block title %}{{ hotel.name }}{% endblock %}
+
+{% block content %}
+<p>
+    <h2>{{ hotel.name }}</h2>
+    <p>{{ hotel.address }}</p>
+    <h3>Comments</h3>
+    {% for comment in comments %}
+        <strong>{{ comment.author }}</strong> : {{ comment.content }}<br>
+    {% else %}
+        Pas encore de commentaire pour cet établissement.
+    {% endfor %}
+</p>
+{% endblock %}
