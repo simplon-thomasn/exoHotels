@@ -6,11 +6,21 @@
 <p>
     <h2>{{ hotel.name }}</h2>
     <p>{{ hotel.address }}</p>
-    <h3>Comments</h3>
+
+    <h3>Commentaires</h3>
+
     {% for comment in comments %}
-        <strong>{{ comment.author }}</strong> : {{ comment.content }}<br>
+        <strong>{{ comment.author.username }}</strong> : {{ comment.content }}<br>
     {% else %}
-        Pas encore de commentaire pour cet établissement.
+        Pas encore de commentaire.
     {% endfor %}
+
+    <h3>Add a comment</h3>
+
+    {% if app.user and is_granted('IS_AUTHENTICATED_FULLY') %}
+        Soon!
+    {% else %}
+        <a href="{{ path('login') }} ">Se connecter</a> pour ajouter des commentaires.
+    {% endif %}
 </p>
 {% endblock %}
